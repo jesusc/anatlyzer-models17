@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:guigen="http://guigen/gui">
+  <guigen:Frame title="Person">
+    <widgets xsi:type="guigen:Text" name="name"/>
+    <widgets xsi:type="guigen:Text" name="address"/>
+    <widgets xsi:type="guigen:Label" value="name"/>
+    <widgets xsi:type="guigen:Label" value="address"/>
+  </guigen:Frame>
+  <guigen:Frame title="Pet">
+    <widgets xsi:type="guigen:Text" name="name"/>
+    <widgets xsi:type="guigen:Label" value="name"/>
+  </guigen:Frame>
+</xmi:XMI>

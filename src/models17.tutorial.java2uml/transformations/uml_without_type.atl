@@ -1,0 +1,14 @@
+-- @nsURI UML=http://www.eclipse.org/uml2/3.0.0/UML
+-- @path JAVA=/models17.tutorial.java2uml/metamodels/JAVA.ecore
+
+module java2uml;
+create CD : UML from CM : JAVA;
+
+rule Class2Class {
+	from s1 : JAVA!FieldDeclaration
+	to t1 : UML!Property (
+		name <- s1.name	
+		
+	)
+}
+

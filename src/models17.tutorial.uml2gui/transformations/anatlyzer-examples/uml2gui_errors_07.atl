@@ -1,0 +1,47 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+-- @pre CD!Property.allInstances()->forAll(v | not v.type.oclIsUndefined())
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+helper context CD!Property def: isText(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and (self.type.name = 'String' or self.type.name = 'Text');
+
+helper context CD!Property def: isDatePicker(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and Set { 'Date', 'DateTime'}->includes(self.type.name);
+	
+--
+-- @warning
+--
+-- The binding "widgets <- c.ownedAttribute" is not completely covered by the
+-- transformation rules. This means that for some values of the right-hand side
+-- there is no rule matching them. 
+--
+-- Possible quick fixes:
+--   - Filter the binding
+--   - Generate a pre-condition
+--
+rule class2frame {
+	from c: CD!Class ( not c.isAbstract )
+	to	f: GUI!Frame (
+		name <- c.name,
+		title <- c.name,
+		widgets <- c.ownedAttribute
+	)
+}
+
+rule property2text {
+	from p: CD!Property ( p.isText()	)
+	to	t: GUI!Text (
+			name <- 'txt' + p.name + '_'
+		)
+}
+
+rule property2date {
+	from p: CD!Property ( p.isDatePicker()	)
+	to	t: GUI!DatePicker (
+			name <- 'txt' + p.name
+		)
+}

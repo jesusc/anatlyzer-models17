@@ -1,0 +1,29 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+--
+-- @problem
+--
+-- The problem is that "type" is optional, therefore it may have an 
+-- OclUndefined value. The access "self.type.name" will then provoke
+-- a runtime error.
+--
+-- There are several possible quick fixes. 
+-- Try: surround with "if" and generate pre-condition
+--
+helper context CD!Property def: isText(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and (self.type.name = 'String' or self.type.name = 'Text');
+
+
+-- The rule is needed for isText() not to be "dead code".
+-- When an error is an dead code zone AnATLyzer cannot construct a valid
+-- path and the error cannot be neither confirmed nor discarded.
+rule property2text {
+	from p: CD!Property ( p.isText()	)
+	to	t: GUI!Text (
+			name <- 'txt' + p.name 
+	)
+}

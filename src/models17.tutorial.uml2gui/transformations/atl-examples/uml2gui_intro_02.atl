@@ -1,0 +1,28 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui";
+create OUT: GUI from IN: CD;
+
+helper context CD!Property def : isText() : Boolean = 
+  self.type.name = 'String';
+
+
+rule class2frame {
+  from c : CD!Class ( not c.isAbstract )
+  to   f : GUI!Frame (
+     title <- c.name,
+     widgets <- c.ownedAttribute,
+	 widgets <- c.ownedAttribute->collect(p | thisModule.resolveTemp(p, 'l'))
+  ) 
+}
+
+rule property2text {
+  from p : CD!Property ( p.isText() )
+  to t : GUI!Text (
+  		name <- p.name
+     ),
+	 l: GUI!Label (
+		value <- p.name
+	 )
+}

@@ -1,0 +1,18 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+--
+-- Use @ force-declared-return-type to fix the warning 
+--
+helper context CD!Element def: getContainingModel() : CD!Model =
+	if self.refImmediateComposite().oclIsTypeOf(CD!Model) then
+		self.refImmediateComposite()
+	else
+		self.refImmediateComposite().getContainingModel()
+	endif;
+
+helper context OclAny def: oclAsType(t : OclType) : OclAny = self;
+helper context CD!Property def: getRow() : Integer = self.refImmediateComposite().oclAsType(CD!Class).ownedAttribute->indexOf(self);

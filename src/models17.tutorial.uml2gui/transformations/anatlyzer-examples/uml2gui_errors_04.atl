@@ -1,0 +1,18 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+--
+-- @problem
+--
+-- Feature "ownedType" has type Type, but "ownedAttribute"
+-- is not defined in all its subclasses, but only in a few
+-- like "Class" or "Association".
+--
+-- To fix the error you need add a filter to select only types
+-- whose type is Class.
+--
+helper context CD!Model def: notEmptyClasses: Sequence(CD!Class) =
+   self.ownedType->select(t | t.ownedAttribute->notEmpty());

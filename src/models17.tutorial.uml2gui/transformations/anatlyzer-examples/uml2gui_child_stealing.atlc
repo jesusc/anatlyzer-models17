@@ -1,0 +1,13 @@
+# Witness
+
+debug-witness-finder off
+
+witness-finder continuous
+
+check-discard-cause off
+
+witness-recursion-unfolding on
+witness-timeout 15000 millis
+
+witness-generation-mode error-path
+

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<guigen:GUI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:guigen="http://guigen/gui">
+  <windows xsi:type="guigen:Frame" name="Person" title="Person"/>
+  <windows xsi:type="guigen:Frame" name="Pet" title="Pet"/>
+</guigen:GUI>

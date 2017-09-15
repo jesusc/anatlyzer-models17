@@ -1,0 +1,21 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+--
+-- @problem
+--
+-- Class Frame have two compulsory attributes which
+-- need to be initialized.
+--
+-- Add a binding
+--
+rule class2frame {
+  from c : CD!Class ( not c.isAbstract )
+  to   f : GUI!Frame (
+
+	) 
+}
+

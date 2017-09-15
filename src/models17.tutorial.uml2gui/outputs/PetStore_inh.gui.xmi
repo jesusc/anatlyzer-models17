@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<guigen:GUI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:guigen="http://guigen/gui">
+  <windows title="Dialog for Person" name="frmPerson">
+    <widgets xsi:type="guigen:Text" name="txtname"/>
+    <widgets xsi:type="guigen:Text" name="txtaddress"/>
+    <widgets xsi:type="guigen:Label" name="labelname" value="name"/>
+    <widgets xsi:type="guigen:Label" name="labeladdress" value="address"/>
+    <layout xsi:type="guigen:GridLayout" numColumns="2">
+      <info widget="//@windows.0/@widgets.0" column="1" row="1"/>
+      <info widget="//@windows.0/@widgets.1" column="1" row="2"/>
+      <info widget="//@windows.0/@widgets.2" column="2" row="1"/>
+      <info widget="//@windows.0/@widgets.3" column="2" row="2"/>
+    </layout>
+  </windows>
+  <windows title="Dialog for Dog" name="frmDog">
+    <widgets xsi:type="guigen:Text" name="txtbreed"/>
+    <widgets xsi:type="guigen:Label" name="labelbreed" value="breed"/>
+    <layout xsi:type="guigen:GridLayout" numColumns="2">
+      <info widget="//@windows.1/@widgets.0" column="1" row="1"/>
+      <info widget="//@windows.1/@widgets.1" column="2" row="1"/>
+    </layout>
+  </windows>
+  <windows title="Dialog for Rabbit" name="frmRabbit">
+    <widgets xsi:type="guigen:Text" name="txtname"/>
+    <widgets xsi:type="guigen:Text" name="txtcolour"/>
+    <widgets xsi:type="guigen:Label" name="labelname" value="name"/>
+    <widgets xsi:type="guigen:Label" name="labelcolour" value="colour"/>
+    <layout xsi:type="guigen:GridLayout" numColumns="2">
+      <info widget="//@windows.2/@widgets.0" column="1" row="1"/>
+      <info widget="//@windows.2/@widgets.1" column="1" row="1"/>
+      <info widget="//@windows.2/@widgets.2" column="2" row="1"/>
+      <info widget="//@windows.2/@widgets.3" column="2" row="1"/>
+    </layout>
+  </windows>
+</guigen:GUI>

@@ -1,0 +1,36 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+helper context CD!Model def: notEmptyClasses : Sequence(CD!Class) = 
+   self.packagedElement->select(t | t.oclIsKindOf(CD!Class))->select(t | t.ownedAttribute->notEmpty());
+
+--
+-- @problem
+--
+-- The binding "windows <- ..." should be resolved by a rule that
+-- generate Window objects or one of its subclasses.
+--
+-- In this case, it is resolved by rule class2frame, which generates
+-- a Frame object, which is not compatible with Window.
+--
+-- Fixes:
+--   - Change GUI!Frame for GUI!Window
+--   - Make Frame a subclass of Window
+--
+rule model2gui {
+  from m: CD!Model 
+	to	g: GUI!GUI (
+		windows <- m.notEmptyClasses->reject(c | c.isAbstract)
+	)
+}
+
+rule class2frame {
+	from c: CD!Class ( not c.isAbstract )
+	to	f : GUI!Frame (
+		name <- c.name,
+		title <- c.name
+	)
+}

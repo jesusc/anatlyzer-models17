@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_pMa-UJxvEeaIVcO9mwZV5A" name="PetStore">
+  <packagedElement xmi:type="uml:Class" xmi:id="_r1eEMJxvEeaIVcO9mwZV5A" name="Person">
+    <ownedAttribute xmi:id="_H-fdAJxzEeaIVcO9mwZV5A" name="name">
+      <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_BrirAKxHEeawoqCTJ_AuTw" name="address">
+      <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_VPKzcJx0EeaIVcO9mwZV5A" name="Pet" isAbstract="true">
+    <ownedAttribute xmi:id="_VPKzcZx0EeaIVcO9mwZV5A" name="name">
+      <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_fYuvIJo1EeeifejecgPvkQ" name="Dog">
+    <generalization xmi:id="__gsKEJo1EeeqXeqsjCtDxQ" general="_VPKzcJx0EeaIVcO9mwZV5A"/>
+    <ownedAttribute xmi:id="_fYuvIZo1EeeifejecgPvkQ" name="breed">
+      <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_CrfSIJo2EeeqXeqsjCtDxQ" name="Rabbit">
+    <generalization xmi:id="_CrfSIZo2EeeqXeqsjCtDxQ" general="_VPKzcJx0EeaIVcO9mwZV5A"/>
+    <ownedAttribute xmi:id="_CrfSIpo2EeeqXeqsjCtDxQ" name="colour">
+      <type xmi:type="uml:PrimitiveType" href="platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+</uml:Model>

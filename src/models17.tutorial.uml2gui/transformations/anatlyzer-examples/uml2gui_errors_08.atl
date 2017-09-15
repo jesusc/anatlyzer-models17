@@ -1,0 +1,84 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+-- @pre CD!Property.allInstances()->forAll(v | not v.type.oclIsUndefined())
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+-- @precondition
+helper def : supportedDataTypes() : Boolean = 
+	CD!Property.allInstances()->forAll(p | 
+		p.isText() or p.isDatePicker() );
+
+helper context CD!Property def: isText(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and (self.type.name = 'String' or self.type.name = 'Text');
+
+helper context CD!Property def: isDatePicker(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and Set { 'Date', 'DateTime'}->includes(self.type.name);
+	
+--
+-- @problem
+--
+-- The output pattern element name in the resolve is wrong.
+-- It should be 'g1' instead of 'grid1'.
+--
+rule class2frame {
+	from c: CD!Class ( not c.isAbstract )
+	to	f: GUI!Window (
+			title <- 'Dialog for ' + c.name,
+			name <- 'frm' + c.name,
+			widgets <- c.ownedAttribute, 
+			widgets <- c.ownedAttribute->collect(a | thisModule.resolveTemp(a, 'l')),
+			layout <- grid 
+		), grid: GUI!GridLayout (
+			numColumns <- 2,
+			info <- c.ownedAttribute->collect(a | thisModule.resolveTemp(a, 'grid1')), 
+			info <- c.ownedAttribute->collect(a | thisModule.resolveTemp(a, 'g2'))
+		)		
+}
+
+rule property2text {
+	from p: CD!Property ( p.isText()	)
+	to	t: GUI!Text (
+			name <- 'txt' + p.name + '_'
+		),
+		l: GUI!Label (
+			value <- p.name, 
+			name <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),		
+			column <- 2,
+			widget <- t
+		),
+		g2: GUI!GridInfo (
+			row <- p.getRow(),
+			column <- 1,
+			widget <- l
+		)
+}
+
+rule property2date {
+	from p: CD!Property ( p.isDatePicker()	)
+	to	t: GUI!DatePicker (
+			name <- 'date' + p.name
+		),
+		l: GUI!Label (
+			value <- p.name, 
+			name <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 2,
+			widget <- t
+		), g2: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 1,
+			widget <- l
+		)
+}
+
+helper context OclAny def: oclAsType(t : OclType) : OclAny = self;
+helper context CD!Property def: getRow() : Integer = self.refImmediateComposite().oclAsType(CD!Class).ownedAttribute->indexOf(self);
+

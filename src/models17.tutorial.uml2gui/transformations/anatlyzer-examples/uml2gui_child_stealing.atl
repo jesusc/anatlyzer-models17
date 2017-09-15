@@ -1,0 +1,122 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+-- @pre CD!Property.allInstances()->forAll(v | not v.type.oclIsUndefined())
+--
+-- This transformation shows how a child stealing situation will occur when
+-- we want to consider inheritance.
+-- 
+module "uml2gui_child_stealing";
+create OUT: GUI from IN: CD;
+
+--
+-- Pre-conditions
+--
+
+-- @precondition
+helper def : supportedDataTypes() : Boolean = 
+	CD!Property.allInstances()->forAll(p | 
+		p.isText() or p.isDatePicker() );
+
+
+--
+-- Helpers
+--
+
+helper context CD!Model def: classifiers : Sequence(CD!Classifier) = 
+  self.ownedType->select(c | c.oclIsKindOf(CD!Classifier));
+
+helper context CD!Class def: superclasses : Sequence(CD!Class) = 
+   self.generalization->
+         collect(g | g.general)->
+         select(c | c.oclIsKindOf(CD!Class));
+
+
+helper context CD!Property def: isText(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and (self.type.name = 'String' or self.type.name = 'Text');
+
+helper context CD!Property def: isDatePicker(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and Set { 'Date', 'DateTime'}->includes(self.type.name);
+
+helper context CD!Model def: notEmptyClasses : Sequence(CD!Class) = 
+   self.packagedElement->select(t | t.oclIsKindOf(CD!Class))->select(t | t.ownedAttribute->notEmpty());
+
+helper context CD!Class def: allAttributes : Sequence(CD!Property) =
+	self.superclasses->collect(c | c.allAttributes)->flatten()->union(self.ownedAttribute);
+
+--
+-- Rules
+--
+
+--- A model is mapped to a GUI, which contains a set of windows
+rule model2gui {
+  from m: CD!Model 
+	to	g: GUI!GUI (
+			windows <- m.notEmptyClasses->reject(c | c.isAbstract)
+		)
+}
+
+--- A class is mapped to a window (or a frame if Frame would inherit from Window)
+--- The window needs a layout, which has been choosen to be a GridLayout
+rule class2frame {
+	from c: CD!Class ( not c.isAbstract )
+	to	f: GUI!Window (
+			title <- 'Dialog for ' + c.name,
+			name <- 'frm' + c.name,
+			widgets <- c.allAttributes, 
+			widgets <- c.allAttributes->collect(a | thisModule.resolveTemp(a, 'l')),
+			layout <- grid 
+		), grid: GUI!GridLayout (
+			numColumns <- 2,
+			info <- c.allAttributes->collect(a | thisModule.resolveTemp(a, 'g1')), 
+			info <- c.allAttributes->collect(a | thisModule.resolveTemp(a, 'g2'))
+		)		
+}
+
+helper context OclAny def: oclAsType(t : OclType) : OclAny = self;
+helper context CD!Property def: getRow() : Integer = self.refImmediateComposite().oclAsType(CD!Class).ownedAttribute->indexOf(self);
+
+
+rule property2text {
+	from p: CD!Property ( p.isText()	)
+	to	t: GUI!Text (
+			name <- 'txt' + p.name
+		),
+		l: GUI!Label (
+			value <- p.name, 
+			name <- 'label' + p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),		
+			column <- 1,
+			widget <- t
+		),
+		g2: GUI!GridInfo (
+			row <- p.getRow(),
+			column <- 2,
+			widget <- l
+		)
+}
+
+rule property2date {
+	from p: CD!Property ( p.isDatePicker()	)
+	to	t: GUI!DatePicker (
+			name <- 'txt' + p.name
+		),
+		l: GUI!Label (
+			value <- p.name, 
+			name <- 'label' + p.name 
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 1,
+			widget <- t
+		), g2: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 2,
+			widget <- l
+		)
+}
+
+
+

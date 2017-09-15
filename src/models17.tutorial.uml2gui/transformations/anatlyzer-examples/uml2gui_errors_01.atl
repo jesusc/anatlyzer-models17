@@ -1,0 +1,17 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+--
+-- @problem
+--
+-- The problems are:
+--   * Clasifier should be Classifier
+--   * ownedType should ownedTypes
+--
+-- Use the quick fix "replace by" to fix them
+--
+helper context CD!Model def: classifiers : Sequence(CD!Clasifier) = 
+  self.ownedTypes->select(c | c.oclIsKindOf(CD!Classifier));

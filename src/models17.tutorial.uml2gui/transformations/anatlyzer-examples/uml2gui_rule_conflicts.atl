@@ -1,0 +1,84 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+--
+-- @pre CD!Property.allInstances()->forAll(v | not v.type.oclIsUndefined())
+--
+-- The problem demonstrated is "Rule conflict".
+-- The filters of rules property2text and property2largeText overlaps,
+-- which will result in a runtime error.
+--
+--
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+helper context CD!Property def: isText(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and (self.type.name = 'String' or self.type.name = 'Text');
+
+helper context CD!Property def: isDatePicker(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and Set { 'Date', 'DateTime'}->includes(self.type.name);
+
+helper context OclAny def: oclAsType(t : OclType) : OclAny = self;
+helper context CD!Property def: getRow() : Integer = self.refImmediateComposite().oclAsType(CD!Class).ownedAttribute->indexOf(self);
+
+
+rule property2text {
+	from p: CD!Property ( p.isText()	)
+	to	t: GUI!Text (
+			name <- 'txt' + p.name + '_'
+		),
+		l: GUI!Label (
+			value <- p.name, 
+			name <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),		
+			column <- 1,
+			widget <- t
+		),
+		g2: GUI!GridInfo (
+			row <- p.getRow(),
+			column <- 2,
+			widget <- l
+		)
+}
+
+rule property2largeText {
+	from p: CD!Property ( p.type.name = 'String' or p.type.name = 'Text' )
+	to	t: GUI!TextArea (
+			name <- 'area' + p.name
+		),
+		l: GUI!Label (
+			value <- p.name, 
+			name <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 1,
+			widget <- t
+		), g2: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 2,
+			widget <- l
+		)
+}
+
+rule property2date {
+	from p: CD!Property ( p.isDatePicker()	)
+	to	t: GUI!DatePicker (
+			name <- 'txt' + p.name
+		),
+		l: GUI!Label (
+			value <- p.name, 
+			name <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 1,
+			widget <- t
+		), g2: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 2,
+			widget <- l
+		)
+}
+

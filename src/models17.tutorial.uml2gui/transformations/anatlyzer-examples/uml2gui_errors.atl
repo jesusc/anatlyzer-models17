@@ -1,0 +1,138 @@
+-- @nsURI CD=http://www.eclipse.org/uml2/5.0.0/UML
+-- @path GUI=/models17.tutorial.uml2gui/metamodels/gui.ecore
+
+module "uml2gui_errors";
+create OUT: GUI from IN: CD;
+
+--
+-- Helpers
+--
+
+helper context CD!Model def: classifiers : Sequence(CD!Clasifier) = 
+  self.ownedTypes->select(c | c.oclIsKindOf(CD!Classifier));
+
+helper context CD!Class def: superclasses : Sequence(CD!Generalization) = 
+   self.generalization->
+         collect(g | g.general)->
+         select(c | c.oclIsKindOf(CD!Class));
+
+
+helper context CD!Property def: isText(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and (self.type.name = 'String' or self.type.name = 'Text');
+
+helper context CD!Property def: isDatePicker(): Boolean =
+	self.type.oclIsKindOf(CD!DataType) and Set { 'Date', 'DateTime'}->includes(self.type.name);
+
+helper context CD!Model def: notEmptyClasses : Sequence(CD!Class) = 
+   self.ownedType->select(t | t.ownedAttribute->notEmpty());
+
+
+--
+-- Rules
+--
+
+--- A model is mapped to a GUI, which contains a set of windows
+--- and a tool bar
+rule model2gui {
+  from m: CD!Model 
+	to	g: GUI!GUI (
+			windows <- m.notEmptyClasses->reject(c | c.isAbstract),
+			toolbar <- m.notEmptyClasses,
+			validators <- m.classifiers->select(c | c.oclIsKindOf(CD!PrimitiveType) and c.name = 'Integer')
+		)
+}
+
+rule class2frame {
+	from c: CD!Class ( not c.isAbstract )
+	to	f: GUI!Frame (
+			name <- 'frm' + c.name,
+			widgets <- c.ownedAttribute, 
+			widgets <- c.ownedAttribute->reject(a | a.isEnumeration)->collect(a | thisModule.resolveTemp(a, 'l')),
+			-- Added
+			widgets <- c.ownedAttribute->
+				select(a | not a.association.oclIsUndefined() and a.aggregation = #composite)->
+				collect(a | thisModule.createPanel(a.association) ),
+			layout <- grid 
+		), grid: GUI!GridLayout (
+			numColumns <- 2,
+			info <- c.ownedAttribute->collect(a | thisModule.resolveTemp(a, 'g1')), -- thisModule.resolveTemp(a, 'grid1')),
+			info <- c.ownedAttribute->reject(a | a.isEnumeration)-> collect(a | thisModule.resolveTemp(a, 'g2'))
+		)		
+}
+
+helper context OclAny def: oclAsType(t : OclType) : OclAny = self;
+helper context CD!Property def: getRow() : Integer = self.refImmediateComposite().oclAsType(CD!Class).ownedAttribute->indexOf(self);
+
+
+rule property2text {
+	from p: CD!Property ( p.isText()	)
+	to	t: GUI!Text (
+			name <- 'txt' + p.name + '_'
+		),
+		l: GUI!Label (
+			value <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),		
+			column <- 1,
+			widget <- t
+		),
+		g2: GUI!GridInfo (
+			row <- p.getRow(),
+			column <- 2,
+			widget <- l
+		)
+}
+
+rule property2largeText {
+	from p: CD!Property ( p.type.name = 'String' or p.type.name = 'Text' )
+	to	t: GUI!TextArea (
+			name <- 'area' + p.name
+		),
+		l: GUI!Label (
+			value <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 1,
+			widget <- t
+		), g2: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 2,
+			widget <- l
+		)
+}
+
+rule property2date {
+	from p: CD!Property ( p.isDatePicker()	)
+	to	t: GUI!DatePicker (
+			name <- 'txt' + p.name
+		),
+		l: GUI!Label (
+			value <- p.name
+		),
+		g1: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 1,
+			widget <- t
+		), g2: GUI!GridInfo (
+			row <- p.getRow(),			
+			column <- 2,
+			widget <- l
+		)
+}
+
+
+
+lazy rule aLazyRule {
+  from p : CD!Property ( p.isText() )
+  to   t : GUI!Text
+}
+
+-- @force-declared-return-type
+helper context CD!Element def: getContainingModel() : CD!Model =
+	if self.refImmediateComposite().oclIsTypeOf(CD!Model) then
+		self.refImmediateComposite()
+	else
+		self.refImmediateComposite().getContainingModel()
+	endif;
