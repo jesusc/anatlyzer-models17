@@ -23,23 +23,24 @@ You need following software:
 
 To use one of the packages download the file and uncompress on your computer. Be careful to change the default workspace folder when Eclipse starts so that it points to the folder in which you have unpacked Eclipse. The examples are already available in this workspace folder.
 
-* [Linux x64](sanchezcuadrado.es/projects/anatlyzer/packages/linux64.tar.gz)
-* [Windows 64-bit](sanchezcuadrado.es/projects/anatlyzer/packages/win64.zip)
-* [MacOS](sanchezcuadrado.es/projects/anatlyzer/packages/macos.zip)
+* [Linux x64](http://sanchezcuadrado.es/projects/anatlyzer/packages/anatlyzer-linux64.tar.gz)
+* [Windows 64-bit](http://sanchezcuadrado.es/projects/anatlyzer/packages/anatlyzer-win64.zip)
+* [MacOS](http://sanchezcuadrado.es/projects/anatlyzer/packages/anatlyzer-macos.zip)
 
 ## Material
 
 ### Slides
 The slides are available both in PDF and Powerpoint format.
 
-* [Presentation](slides/00-main.pdf)
-* [Introduction to ATL](slides/01-intro.pdf)
-* [Using AnATLyzer](slides/02-anatlyzer.pdf)
-* [Using AnATLyzer programmatically](slides/03-programmatic.pdf)
+* [Presentation](slides-pdf/00-main.pdf)
+* [Introduction to ATL](slides-pdf/01-intro.pdf)
+* [Using AnATLyzer](slides-pdf/02-anatlyzer.pdf)
+* [Using AnATLyzer programmatically](slides-pdf/03-programmatic.pdf)
+* [Exercises](slides-pdf/exercises.pdf)
 
 ### Example projects
 
 The example projects are packaged in a single .zip file. To import into the Eclipse workspace do:  
 
 * File -> Import -> General -> Existing Projects into Workspace -> Select archive file
-* [Example projects (.zip)](src/example-projects.zip)
+* [Example projects (.zip)](zips/example-projects.zip)
