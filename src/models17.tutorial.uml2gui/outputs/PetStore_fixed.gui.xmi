@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<guigen:GUI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:guigen="http://guigen/gui">
+  <windows title="Dialog for Person" name="frmPerson">
+    <widgets xsi:type="guigen:Text" name="txtname_"/>
+    <widgets xsi:type="guigen:Text" name="txtaddress_"/>
+    <widgets xsi:type="guigen:Label" name="lblname" value="name"/>
+    <widgets xsi:type="guigen:Label" name="lbladdress" value="address"/>
+    <layout xsi:type="guigen:GridLayout" numColumns="2">
+      <info widget="//@windows.0/@widgets.0" column="2" row="1"/>
+      <info widget="//@windows.0/@widgets.1" column="2" row="2"/>
+      <info widget="//@windows.0/@widgets.2" column="1" row="1"/>
+      <info widget="//@windows.0/@widgets.3" column="1" row="2"/>
+    </layout>
+  </windows>
+  <windows title="Dialog for Pet" name="frmPet">
+    <widgets xsi:type="guigen:Text" name="txtname_"/>
+    <widgets xsi:type="guigen:DatePicker" name="datebirth"/>
+    <widgets xsi:type="guigen:Label" name="lblname" value="name"/>
+    <widgets xsi:type="guigen:Label" name="lblbirth" value="birth"/>
+    <layout xsi:type="guigen:GridLayout" numColumns="2">
+      <info widget="//@windows.1/@widgets.0" column="2" row="1"/>
+      <info widget="//@windows.1/@widgets.1" column="2" row="2"/>
+      <info widget="//@windows.1/@widgets.2" column="1" row="1"/>
+      <info widget="//@windows.1/@widgets.3" column="1" row="2"/>
+    </layout>
+  </windows>
+</guigen:GUI>

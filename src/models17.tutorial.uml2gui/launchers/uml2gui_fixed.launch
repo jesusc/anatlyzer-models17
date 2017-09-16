@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.m2m.atl.adt.launching.atlTransformation">
-<stringAttribute key="ATL File Name" value="/models17.tutorial.uml2gui/transformations/atl-examples/uml2gui_intro_01.atl"/>
+<stringAttribute key="ATL File Name" value="/models17.tutorial.uml2gui/transformations/uml2gui_fixed.atl"/>
 <stringAttribute key="ATL VM" value="EMF-specific VM"/>
 <stringAttribute key="ATL_COMPILER" value="atl2006"/>
 <booleanAttribute key="IS_REFINING" value="false"/>
@@ -40,7 +40,7 @@
 <mapEntry key="CD" value="uri:http://www.eclipse.org/uml2/5.0.0/UML"/>
 <mapEntry key="GUI" value="/models17.tutorial.uml2gui/metamodels/gui.ecore"/>
 <mapEntry key="IN" value="/models17.tutorial.uml2gui/models/PetStore.uml"/>
-<mapEntry key="OUT" value="/models17.tutorial.uml2gui/outputs/PetStore.gui.xmi"/>
+<mapEntry key="OUT" value="/models17.tutorial.uml2gui/outputs/PetStore_fixed.gui.xmi"/>
 </mapAttribute>
 <listAttribute key="Superimpose"/>
 </launchConfiguration>
